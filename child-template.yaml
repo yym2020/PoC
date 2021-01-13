@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: --A Sample template to understand what parent stack and child stack(This is the child template)
+Parameters: 
+  ChildParameterA:
+    Description: Your sample parameter A
+    Type: String
+  ChildParameterB:
+    Description: Your sample parameter B
+    Type: String
+    AllowedPattern: '[^\s@]+@[^\s@]+\.[^\s@]+'
+    ConstraintDescription: You should enter a valid email
+Resources: 
+  VPC:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags: 
+          - Key: Name
+            Value: !Ref ChildParameterA
+          - Key: User
+            Value: !Ref ChildParameterB
+Outputs:
+   MYVPC:
+     Description: The ID of the VPC
+     Value: !Ref VPC

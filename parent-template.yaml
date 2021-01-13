@@ -1,0 +1,44 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: --- A Sample template to understand what parent stack and child stack(This is the parent template)
+Metadata: 
+  'AWS::CloudFormation::Interface':
+    ParameterGroups:
+      - Label:
+          default: Basic Configuration
+        Parameters:
+          - ParentParameterA
+          - ParentParameterB
+    ParameterLabels:
+      ParentParameterA:
+        default: Sample parent parameter A
+      ParentParameterB:
+        default: Sample parent parameter B
+Parameters: 
+  ParentParameterA:
+    Description: Your sample parameter A
+    Type: String
+  ParentParameterB:
+    Description: Your sample parameter B
+    Type: String
+    AllowedPattern: '[^\s@]+@[^\s@]+\.[^\s@]+'
+    ConstraintDescription: You should enter a valid email
+Resources: 
+  ChildStack:
+    Type: 'AWS::CloudFormation::Stack'
+    Properties:
+      TemplateURL: "https://yymopen.s3-ap-southeast-1.amazonaws.com/child-template.yaml"
+      Parameters:
+        ChildParameterA: !Ref ParentParameterA
+        ChildParameterB: !Ref ParentParameterB
+  InstanceSecurityGroup:
+       Type: 'AWS::EC2::SecurityGroup'
+       Properties:
+          VpcId: !GetAtt ChildStack.Outputs.MYVPC
+          GroupDescription: EC2 Instances Security Group
+          SecurityGroupIngress:
+              - IpProtocol: -1
+                CidrIp: 0.0.0.0/0
+Outputs:
+  MYSecurityGroup:
+    Description: Parent Yaml created security group
+    Value: !Ref InstanceSecurityGroup
