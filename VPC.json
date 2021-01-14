@@ -1,10 +1,10 @@
 {
     "Description": "This template deploys a VPC, with a pair of public and private subnets spread across two Availability Zones. It deploys an internet gateway, with a default route on the public subnets. It deploys a pair of NAT gateways (one in each AZ), and default routes for them in the private subnets.",
     "Parameters": {
-        "EnvironmentName": {
-            "Description": "An environment name that is prefixed to resource names",
+        "ParentStackName": {
+            "Description": "prefixed StackName to resource names",
             "Type": "String"
-        },
+          },
         "VpcCIDR": {
             "Description": "Please enter the IP range (CIDR notation) for this VPC",
             "Type": "String",
@@ -44,7 +44,7 @@
                     {
                         "Key": "Name",
                         "Value": {
-                            "Ref": "EnvironmentName"
+                            "Ref": "ParentStackName"
                         }
                     }
                 ]
@@ -57,7 +57,7 @@
                     {
                         "Key": "Name",
                         "Value": {
-                            "Ref": "EnvironmentName"
+                            "Ref": "ParentStackName"
                         }
                     }
                 ]
@@ -96,7 +96,7 @@
                     {
                         "Key": "Name",
                         "Value": {
-                            "Fn::Sub": "${EnvironmentName} Public Subnet (AZ1)"
+                            "Fn::Sub": "${ParentStackName} Public Subnet (AZ1)"
                         }
                     }
                 ]
@@ -124,7 +124,7 @@
                     {
                         "Key": "Name",
                         "Value": {
-                            "Fn::Sub": "${EnvironmentName} Public Subnet (AZ2)"
+                            "Fn::Sub": "${ParentStackName} Public Subnet (AZ2)"
                         }
                     }
                 ]
@@ -152,7 +152,7 @@
                     {
                         "Key": "Name",
                         "Value": {
-                            "Fn::Sub": "${EnvironmentName} Private Subnet (AZ1)"
+                            "Fn::Sub": "${ParentStackName} Private Subnet (AZ1)"
                         }
                     }
                 ]
@@ -180,7 +180,7 @@
                     {
                         "Key": "Name",
                         "Value": {
-                            "Fn::Sub": "${EnvironmentName} Private Subnet (AZ2)"
+                            "Fn::Sub": "${ParentStackName} Private Subnet (AZ2)"
                         }
                     }
                 ]
@@ -238,7 +238,7 @@
                     {
                         "Key": "Name",
                         "Value": {
-                            "Fn::Sub": "${EnvironmentName} Public Routes"
+                            "Fn::Sub": "${ParentStackName} Public Routes"
                         }
                     }
                 ]
@@ -289,7 +289,7 @@
                     {
                         "Key": "Name",
                         "Value": {
-                            "Fn::Sub": "${EnvironmentName} Private Routes (AZ1)"
+                            "Fn::Sub": "${ParentStackName} Private Routes (AZ1)"
                         }
                     }
                 ]
@@ -328,7 +328,7 @@
                     {
                         "Key": "Name",
                         "Value": {
-                            "Fn::Sub": "${EnvironmentName} Private Routes (AZ2)"
+                            "Fn::Sub": "${ParentStackName} Private Routes (AZ2)"
                         }
                     }
                 ]

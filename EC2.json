@@ -4,10 +4,6 @@
     "Description" : "Create a multi-az, load balanced and auto-scaled sample web site running on an Apache Web Server. The application is configured to span all Availability Zones in the region and is auto-scaled based on the CPU utilization of the web servers. Notifications will be sent to the operator email address on scaling events. The instances are load balanced with a simple health check against the default web page. **WARNING** This template creates one or more Amazon EC2 instances and an Elastic Load Balancer. You will be billed for the AWS resources used if you create a stack from this template.",
   
     "Parameters" : {
-      "StackEnvironmentName": {
-        "Description": "An environment name that is prefixed to resource names",
-        "Type": "String"
-      },
       "InstanceType" : {
         "Description" : "WebServer EC2 instance type",
         "Type" : "String",
@@ -228,11 +224,11 @@
         "Properties": {
             "TemplateURL": "https://yymopen.s3-ap-southeast-1.amazonaws.com/VPC.json",
             "Parameters": {
-                "EnvironmentName": {
-                    "Ref": "StackEnvironmentName"
-                }
-            }
-        }
+              "ParentStackName": {
+                  "Ref": "AWS::StackName"
+              }
+          }
+          }
     },
       "NotificationTopic": {
         "Type": "AWS::SNS::Topic",
@@ -247,6 +243,15 @@
           "LaunchConfigurationName" : { "Ref" : "LaunchConfig" },
           "MinSize" : "1",
           "MaxSize" : "3",
+          "Tags": [
+            {
+                "Key": "Name",
+                "Value": {
+                    "Ref": "AWS::StackName"
+                },
+                "PropagateAtLaunch":"true"
+            }
+        ],
           "LoadBalancerNames" : [ { "Ref" : "ElasticLoadBalancer" } ],
           "VPCZoneIdentifier":[ { 
             "Fn::GetAtt": [ 
@@ -352,12 +357,15 @@
                "         --stack ", { "Ref" : "AWS::StackName" },
                "         --resource LaunchConfig ",
                "         --region ", { "Ref" : "AWS::Region" }, "\n",
-  
+               "INSTANCE_ID=\"`wget -q -O - http://instance-data/latest/meta-data/instance-id`\" &&  \n",
+               "AZ_ID=\"`wget -q -O - http://instance-data/latest/meta-data/placement/availability-zone`\" &&  \n",
+               "echo \"<h1>Welcome to your application $INSTANCE_ID in $AZ_ID</h1>\" > /var/www/html/index.html && \n",   
                "/opt/aws/bin/cfn-signal -e $? ",
                "         --stack ", { "Ref" : "AWS::StackName" },
                "         --resource WebServerGroup ",
                "         --region ", { "Ref" : "AWS::Region" }, "\n"
-          ]]}}
+           
+            ]]}}
         }
       },
   
@@ -366,7 +374,7 @@
         "Properties" : {
           "AdjustmentType" : "ChangeInCapacity",
           "AutoScalingGroupName" : { "Ref" : "WebServerGroup" },
-          "Cooldown" : "60",
+          "Cooldown" : "30",
           "ScalingAdjustment" : "1"
         }
       },
@@ -375,7 +383,7 @@
         "Properties" : {
           "AdjustmentType" : "ChangeInCapacity",
           "AutoScalingGroupName" : { "Ref" : "WebServerGroup" },
-          "Cooldown" : "60",
+          "Cooldown" : "30",
           "ScalingAdjustment" : "-1"
         }
       },
@@ -383,13 +391,13 @@
       "CPUAlarmHigh": {
        "Type": "AWS::CloudWatch::Alarm",
        "Properties": {
-          "AlarmDescription": "Scale-up if CPU > 90% for 10 minutes",
+          "AlarmDescription": "Scale-up if CPU > 80% for 3 minutes",
           "MetricName": "CPUUtilization",
           "Namespace": "AWS/EC2",
           "Statistic": "Average",
-          "Period": "300",
-          "EvaluationPeriods": "2",
-          "Threshold": "90",
+          "Period": "60",
+          "EvaluationPeriods": "1",
+          "Threshold": "30",
           "AlarmActions": [ { "Ref": "WebServerScaleUpPolicy" } ],
           "Dimensions": [
             {
@@ -403,13 +411,13 @@
       "CPUAlarmLow": {
        "Type": "AWS::CloudWatch::Alarm",
        "Properties": {
-          "AlarmDescription": "Scale-down if CPU < 70% for 10 minutes",
+          "AlarmDescription": "Scale-down if CPU < 40% for 3 minutes",
           "MetricName": "CPUUtilization",
           "Namespace": "AWS/EC2",
           "Statistic": "Average",
-          "Period": "300",
-          "EvaluationPeriods": "2",
-          "Threshold": "70",
+          "Period": "60",
+          "EvaluationPeriods": "3",
+          "Threshold": "10",
           "AlarmActions": [ { "Ref": "WebServerScaleDownPolicy" } ],
           "Dimensions": [
             {
