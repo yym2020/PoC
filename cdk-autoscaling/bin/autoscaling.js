@@ -1,0 +1,9 @@
+#!/usr/bin/env node
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+require("source-map-support/register");
+const cdk = require("@aws-cdk/core");
+const autoscaling_stack_1 = require("../lib/autoscaling-stack");
+const app = new cdk.App();
+new autoscaling_stack_1.AutoscalingStack(app, 'AutoscalingStack');
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYXV0b3NjYWxpbmcuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJhdXRvc2NhbGluZy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7QUFDQSx1Q0FBcUM7QUFDckMscUNBQXFDO0FBQ3JDLGdFQUE0RDtBQUU1RCxNQUFNLEdBQUcsR0FBRyxJQUFJLEdBQUcsQ0FBQyxHQUFHLEVBQUUsQ0FBQztBQUMxQixJQUFJLG9DQUFnQixDQUFDLEdBQUcsRUFBRSxrQkFBa0IsQ0FBQyxDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiIyEvdXNyL2Jpbi9lbnYgbm9kZVxuaW1wb3J0ICdzb3VyY2UtbWFwLXN1cHBvcnQvcmVnaXN0ZXInO1xuaW1wb3J0ICogYXMgY2RrIGZyb20gJ0Bhd3MtY2RrL2NvcmUnO1xuaW1wb3J0IHsgQXV0b3NjYWxpbmdTdGFjayB9IGZyb20gJy4uL2xpYi9hdXRvc2NhbGluZy1zdGFjayc7XG5cbmNvbnN0IGFwcCA9IG5ldyBjZGsuQXBwKCk7XG5uZXcgQXV0b3NjYWxpbmdTdGFjayhhcHAsICdBdXRvc2NhbGluZ1N0YWNrJyk7XG4iXX0=
