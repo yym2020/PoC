@@ -35,3 +35,14 @@ The development team's requirement is to integrate the whole infrastructre envir
     cdk-autoscaling/lib/autoscaling-stack.ts // main stack file
 
     cdk-autoscaling/assets/asg-userdata      // userdata for new instances
+
+### D) Serverless CDK -- AWS CDK/Typescript
+This project is used to prove CDK capability of handling AWS Lambda/API/Gateway/DynamoDB etc for serverless application. It creates 3 Lambda functions responding to 3 API methods in API Gateway, and update a Dynamodb table. 
+
+    cdk-serverless/lambda/hello.js  // send back basic http body information
+
+    cdk-serverlss/lambda/create.js  // post new dynamodb table item 
+
+    cdk-serverless/lambda/read.js   // get the existing dynamodb table item
+
+Please use [Postman application](https://www.postman.com/downloads/) or Chrome app to simulate http post and use direct http url like https://xxxx.execute-api.us-east-2.amazonaws.com/prod/read?table=Users&name=xxx to get the added dynamodb item.
