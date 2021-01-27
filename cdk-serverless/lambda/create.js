@@ -1,0 +1,29 @@
+const AWS = require(`aws-sdk`);
+var Region = process.env.AWS_REGION;
+AWS.config.update({Region: `Region`});
+const dynamo = new AWS.DynamoDB.DocumentClient();
+
+exports.handler = (event, context, callback) => {
+
+    const TableName = event.queryStringParameters.table; 
+    const Item = {name: event.queryStringParameters.name, age: event.queryStringParameters.age};
+   
+    dynamo.put({TableName, Item}, function (err, data) {
+        if (err) {
+            console.log(`error`, err);
+            callback(err, null);
+        } else {
+            var response = {
+                statusCode: 200,
+                headers: {
+                    'Content-Type': `application/json`,
+                    'Access-Control-Allow-Methods': `GET,POST,OPTIONS`,
+                    'Access-Control-Allow-Credentials': `true`
+                },
+                isBase64Encoded: false
+            };
+            console.log(`success: returned ${data.Item}`);
+            callback(null, response);
+        }
+    });
+};
