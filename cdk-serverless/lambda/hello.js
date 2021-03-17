@@ -3,7 +3,7 @@ exports.handler = async function(event) {
   return {
     statusCode: 200,
     headers: { "Content-Type": "text/plain" },
-    body: `Hello and Welcome!\n`
+    body: `Hello and welcome to this serverless CDK project!\n`
   };
 };
 
