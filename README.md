@@ -45,4 +45,8 @@ This project is used to prove CDK capability of handling AWS Lambda/API/Gateway/
 
     cdk-serverless/lambda/read.js   // get the existing dynamodb table item
 
-Please use [Postman application](https://www.postman.com/downloads/) or Chrome app to simulate http post and use direct http url like https://xxxx.execute-api.us-east-2.amazonaws.com/prod/read?table=Users&name=xxx to get the added dynamodb item.
+To check the new created API Gateway and Lambda integration, please type in URL like https://xxxxxx.execute-api.ap-southeast-1.amazonaws.com/prod/hello, you may get the message "Hello and welcome to this serverless CDK project!".
+
+Use [Postman application](https://www.postman.com/downloads/) or Chrome app to simulate http post like https://xxxxxx.execute-api.us-east-2.amazonaws.com/prod/create?table=Users&name=xxxxxx&age=xxxxxx to add dynamodb item.
+
+Use URL like https://xxxxxx.execute-api.ap-southeast-1.amazonaws.com/prod/read?table=Users&name=xxxxxx to get the new added DynamoDB item 

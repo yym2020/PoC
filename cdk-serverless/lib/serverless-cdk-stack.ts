@@ -20,7 +20,7 @@ export class ServerlessCdkStack extends cdk.Stack {
 				tableName: tableName,
 				readCapacity: dynamoDbReadWrite,
 				billingMode: dynamodb.BillingMode.PROVISIONED,
-				removalPolicy: RemovalPolicy.DESTROY
+				removalPolicy: RemovalPolicy.DESTROY // grant cdk to delete dynamodb table
 			});
 
 			// create apigateway 
